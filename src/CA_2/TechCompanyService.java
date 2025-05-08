@@ -11,7 +11,8 @@ package CA_2;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 public class TechCompanyService {
@@ -40,6 +41,42 @@ public class TechCompanyService {
         }
     }
   
+// Handle searching in file
+    public void handleSearch(Scanner sc) {
+        List<String> names = new ArrayList<>();
+        try (Scanner fileReader = new Scanner(new File("Applicants_Form.txt"))) {
+            while (fileReader.hasNextLine()) {
+                String line = fileReader.nextLine().trim();
+                if (!line.isEmpty() && !line.toLowerCase().startsWith("full name")) {
+                    names.add(line);
+                }
+            }
+            // Sort names by full name for binary search
+            names.sort(Comparator.comparing(s -> {
+                String[] parts = s.split(",");
+                if (parts.length > 1) {
+                    return (parts[0] + " " + parts[1]).toLowerCase(); // first + last
+                } else {
+                    return s.toLowerCase();
+                }
+            }));
+
+            // Input from user
+            System.out.print("Enter  the full name to search: ");
+            String target = sc.nextLine().trim().toLowerCase(); // Get user input
+            // Binary search
+            int index = binarySearchName(names, target);
+            if (index >= 0) {
+                System.out.println("Found: " + names.get(index));
+            } else {
+                System.out.println("Not found! pleas try to enter the full name ");
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println(" Applicants_Form.txt not found! Please make sure the file is in the root directory.");
+        }
+    }
+
     // Merge sort algorithm for sorting names
     private void mergeSort(List<String> list, int left, int right) {
         if (left < right) {
@@ -71,9 +108,24 @@ public class TechCompanyService {
         }
     }
 
-    
-    
+    // Binary search for names (String list)
+    private int binarySearchName(List<String> list, String target) {
+        int low = 0, high = list.size() - 1;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            String[] parts = list.get(mid).split(",");
+            String fullName = (parts[0] + " " + parts[1]).toLowerCase();
 
+            int cmp = fullName.compareTo(target);
+            if (cmp == 0) {
+                return mid;
+            } else if (cmp < 0) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return -1;
+    }
     
-
 }
