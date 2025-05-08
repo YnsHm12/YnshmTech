@@ -168,5 +168,26 @@ public class TechCompanyService {
         }
 
     }
+    // Generate 10 random employees
+    public void generateRandomEmployees(int count) {
+        String[] sampleNames = {"Kate", "Ken", "James", "Michael", "Eve", "Frank", "Ethan", "Hank", "Ivy", "Jack"};
+         String[] lastNames = {"Summer", "Winter", "Anderson", "Williams", "Wilson", "Clark", "Taylor", "Clark", "White", "Martin"};
+        String[] managerTypes = {"CTO", "TECHNICAL_LEAD", "PROJECT_MANAGER"};
+        String[] departmentTypes = {"FRONT_END", "BACK_END", "HR"};
+        Random rand = new Random();
+
+        for (int i = 0; i < count; i++) {
+            String name = sampleNames[rand.nextInt(sampleNames.length)] + rand.nextInt(100);
+            String lastName = lastNames[rand.nextInt(lastNames.length)] + rand.nextInt(100); 
+            Manager m = new Manager(managerTypes[rand.nextInt(managerTypes.length)]);
+            Department d = new Department(departmentTypes[rand.nextInt(departmentTypes.length)]);
+            employeeList.add(new Employee(name,lastName, m, d));
+        }
+
+        System.out.println("\nRandom Employees:");
+        for (Employee e : employeeList) {
+            System.out.println(e);
+        }
+    }
     
 }
