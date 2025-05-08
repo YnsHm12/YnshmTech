@@ -127,5 +127,46 @@ public class TechCompanyService {
         }
         return -1;
     }
+     // Adding an employee manually
+    public void handleAdd(Scanner sc) {
+        System.out.print("Please input Employee firstName: ");
+        String name = sc.nextLine();
+        System.out.print("Please input Employee lastName: ");
+        String lastname= sc.nextLine();
+
+        String[] managerTypes = {"CTO", "TECHNICAL_LEAD", "PROJECT_MANAGER"};
+        String[] departmentTypes = {"FRONT_END", "BACK_END", "HR"};
+
+        System.out.println("Please select from the following Management Staff:");
+        for (int i = 0; i < managerTypes.length; i++) {
+            System.out.println((i + 1) + ". " + managerTypes[i].replace("_", " "));
+        }
+        int mChoice = sc.nextInt();
+
+        System.out.println("Please select the Department: ");
+        for (int i = 0; i < departmentTypes.length; i++) {
+            System.out.println((i + 1) + ". " + departmentTypes[i].replace("_", " "));
+        }
+        int dChoice = sc.nextInt();
+        sc.nextLine(); // consume newline
+
+        if (mChoice >= 1 && mChoice <= managerTypes.length && dChoice >= 1 && dChoice <= departmentTypes.length) {
+            Manager m = new Manager(managerTypes[mChoice - 1]);
+            Department d = new Department(departmentTypes[dChoice - 1]);
+            Employee e = new Employee(name,lastname, m, d);
+            employeeList.add(e);
+
+            // Save to file
+            try (FileWriter writer = new FileWriter("Applicants_Form.txt", true)) {
+                writer.write(name + ","+lastname+"," + d.getName() + "," + m.getType() + "\n");
+                System.out.println(name+" "+lastname + " has been added as " + m + " to " + d + " successfully and saved to file!");
+            } catch (IOException ex) {
+                System.out.println("Error saving to file: " + ex.getMessage());
+            }
+        } else {
+            System.out.println("Invalid selection.");
+        }
+
+    }
     
 }
