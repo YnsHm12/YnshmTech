@@ -13,8 +13,11 @@ public class YnshmTech {
     /**
      * @param args the command line arguments
      */
+     enum MenuOption {
+        SORT, SEARCH, ADD_RECORDS, GENERATE_RANDOM, EXIT
+    }
     public static void main(String[] args) {
-        // TODO code application logic here
+        
     }
     
 }
